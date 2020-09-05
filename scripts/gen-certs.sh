@@ -1,14 +1,14 @@
 #! /bin/bash
 
-WEBHOOK_NS=k8s-webhook-example
-WEBHOOK_NAME=k8s-webhook-example
+WEBHOOK_NS=k8s-webhook
+WEBHOOK_NAME=k8s-webhook
 WEBHOOK_SVC=${WEBHOOK_NAME}.${WEBHOOK_NS}.svc
 OUT_CERT_FILE=./deploy/app-certs.yaml
 OUT_WEBBOK_FILE=./deploy/webhooks.yaml
 
 # Create certs for our webhook (20 years).
 openssl genrsa -out webhookCA.key 2048
-openssl req -new -key ./webhookCA.key -subj "/CN=${WEBHOOK_SVC}" -out ./webhookCA.csr 
+openssl req -new -key ./webhookCA.key -subj "/CN=${WEBHOOK_SVC}" -out ./webhookCA.csr
 openssl x509 -req -days 7300 -in webhookCA.csr -signkey webhookCA.key -out webhook.crt
 
 # Create certs secrets for k8s.

@@ -48,7 +48,7 @@ jobs:
         env:
           # DockerHub.
           DOCKER_HOST: ""
-          DOCKER_USER: slok
+          DOCKER_USER: kavla
           DOCKER_TOKEN: ${{secrets.DOCKER_HUB_TOKEN}}
           ## Github.
           # DOCKER_HOST: docker.pkg.github.com
@@ -56,7 +56,7 @@ jobs:
           # DOCKER_USER: ${GITHUB_ACTOR}
           ## Gitlab.
           # DOCKER_HOST: registry.gitlab.com
-          # DOCKER_USER: slok
+          # DOCKER_USER: kav
           # DOCKER_TOKEN: ${{secrets.GITLAB_TOKEN}}
 
       - name: Publish image

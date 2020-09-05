@@ -3,8 +3,8 @@
 set -o errexit
 set -o nounset
 
-src=./cmd/k8s-webhook-example
-out=./bin/k8s-webhook-example
+src=./cmd/k8s-webhook
+out=./bin/k8s-webhook
 
 ostype=${ostype:-"native"}
 binary_ext=""

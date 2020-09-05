@@ -4,37 +4,20 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/slok/k8s-webhook-example/internal/log"
-	"github.com/slok/k8s-webhook-example/internal/mutation/mark"
-	"github.com/slok/k8s-webhook-example/internal/mutation/prometheus"
-	"github.com/slok/k8s-webhook-example/internal/validation/ingress"
+	"github.com/pelotech/k8s-templated-configuration/internal/log"
+	"github.com/pelotech/k8s-templated-configuration/internal/mutation/template"
 )
 
 // Config is the handler configuration.
 type Config struct {
-	MetricsRecorder            MetricsRecorder
-	Marker                     mark.Marker
-	IngressRegexHostValidator  ingress.Validator
-	IngressSingleHostValidator ingress.Validator
-	ServiceMonitorSafer        prometheus.ServiceMonitorSafer
-	Logger                     log.Logger
+	MetricsRecorder MetricsRecorder
+	Templater       template.Templater
+	Logger          log.Logger
 }
 
 func (c *Config) defaults() error {
-	if c.Marker == nil {
-		return fmt.Errorf("marker is required")
-	}
-
-	if c.IngressRegexHostValidator == nil {
-		return fmt.Errorf("ingress regex host validator is required")
-	}
-
-	if c.IngressSingleHostValidator == nil {
-		return fmt.Errorf("ingress single host validator is required")
-	}
-
-	if c.ServiceMonitorSafer == nil {
-		return fmt.Errorf("service monitor safer is required")
+	if c.Templater == nil {
+		return fmt.Errorf("templater is required")
 	}
 
 	if c.MetricsRecorder == nil {
@@ -49,13 +32,10 @@ func (c *Config) defaults() error {
 }
 
 type handler struct {
-	marker           mark.Marker
-	ingRegexHostVal  ingress.Validator
-	ingSingleHostVal ingress.Validator
-	servMonSafer     prometheus.ServiceMonitorSafer
-	handler          http.Handler
-	metrics          MetricsRecorder
-	logger           log.Logger
+	templater template.Templater
+	handler   http.Handler
+	metrics   MetricsRecorder
+	logger    log.Logger
 }
 
 // New returns a new webhook handler.
@@ -68,13 +48,10 @@ func New(config Config) (http.Handler, error) {
 	mux := http.NewServeMux()
 
 	h := handler{
-		handler:          mux,
-		marker:           config.Marker,
-		ingRegexHostVal:  config.IngressRegexHostValidator,
-		ingSingleHostVal: config.IngressSingleHostValidator,
-		servMonSafer:     config.ServiceMonitorSafer,
-		metrics:          config.MetricsRecorder,
-		logger:           config.Logger.WithKV(log.KV{"service": "webhook-handler"}),
+		handler:   mux,
+		templater: config.Templater,
+		metrics:   config.MetricsRecorder,
+		logger:    config.Logger.WithKV(log.KV{"service": "webhook-handler"}),
 	}
 
 	// Register all the routes with our router.

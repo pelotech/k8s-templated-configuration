@@ -6,5 +6,5 @@ data:
 kind: Secret
 metadata:
   creationTimestamp: null
-  name: k8s-webhook-example-certs
-  namespace: k8s-webhook-example
+  name: k8s-webhook-certs
+  namespace: k8s-webhook

@@ -15,12 +15,12 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 
-	"github.com/slok/k8s-webhook-example/internal/http/webhook"
-	"github.com/slok/k8s-webhook-example/internal/log"
-	internalmetricsprometheus "github.com/slok/k8s-webhook-example/internal/metrics/prometheus"
-	"github.com/slok/k8s-webhook-example/internal/mutation/mark"
-	internalmutationprometheus "github.com/slok/k8s-webhook-example/internal/mutation/prometheus"
-	"github.com/slok/k8s-webhook-example/internal/validation/ingress"
+	"github.com/pelotech/k8s-templated-configuration/internal/http/webhook"
+	"github.com/pelotech/k8s-templated-configuration/internal/log"
+	internalmetricsprometheus "github.com/pelotech/k8s-templated-configuration/internal/metrics/prometheus"
+	"github.com/pelotech/k8s-templated-configuration/internal/mutation/mark"
+	internalmutationprometheus "github.com/pelotech/k8s-templated-configuration/internal/mutation/prometheus"
+	"github.com/pelotech/k8s-templated-configuration/internal/validation/ingress"
 )
 
 var (
@@ -36,7 +36,7 @@ func runApp() error {
 
 	// Set up logger.
 	logrusLog := logrus.New()
-	logrusLogEntry := logrus.NewEntry(logrusLog).WithField("app", "k8s-webhook-example")
+	logrusLogEntry := logrus.NewEntry(logrusLog).WithField("app", "k8s-webhook")
 	if cfg.Debug {
 		logrusLogEntry.Logger.SetLevel(logrus.DebugLevel)
 	}

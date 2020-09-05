@@ -2,29 +2,37 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: k8s-webhook-example-webhook
+  name: k8s-webhook-webhook
   labels:
-    app: k8s-webhook-example-webhook
+    app: k8s-webhook-webhook
     kind: mutator
 webhooks:
   - name: all-mark-webhook.slok.dev
     clientConfig:
       service:
-        name: k8s-webhook-example
-        namespace: k8s-webhook-example
+        name: k8s-webhook
+        namespace: k8s-webhook
         path: /wh/mutating/allmark
       caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM4ekNDQWRzQ0ZDL1lrSE50ZjQzajF1aGttbnpXc3pvQTZhbVFNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1EWXgKTkRBeUJnTlZCQU1NSzJzNGN5MTNaV0pvYjI5ckxXVjRZVzF3YkdVdWF6aHpMWGRsWW1odmIyc3RaWGhoYlhCcwpaUzV6ZG1Nd0hoY05NakF3TlRFNU1UQXdNakV6V2hjTk5EQXdOVEUwTVRBd01qRXpXakEyTVRRd01nWURWUVFECkRDdHJPSE10ZDJWaWFHOXZheTFsZUdGdGNHeGxMbXM0Y3kxM1pXSm9iMjlyTFdWNFlXMXdiR1V1YzNaak1JSUIKSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXlFczZzNUZzWExzRWR5bndZMThKNHpMQgpuNmFIYUdHdXVZU2NpeXNodXR3amJUTTdUMTNMeWEwdi93SmxlWGtObGQ4MkI2QWRhMjF0L1RsemxXdmFBenk4CnZBNFF3ZXdQdndiaVZ2MFRTOUdTczJZSmFjNFdPNzlCVE02ekJ6cTVPU3FwZ1JMSnVGdVp3ZWJkd2xzS0tDcjkKRzlka00rdjdKd0VaTCtKV1hPSVR5SWN4djlsV01ZV2dHUm1MK1dSb21SdGZWVnZDZmdJUEJsbWR4R3R2YVFIVgpDWkdGTDQrTzhLcUFUQmRaSUE1Q3p1TGZ2cDhYT29HVjlzTDRvR2xCKzJxTDVYVUQ1OEZQeTNYR3FlOW5NM0YyClF2Y2dtcTdGNGg0UmtqV0ZHR1YrdDVQRUpnVmJCYkJuVlR0b1FEd1c3RDBSY3BVZnB3TlY4aVBFQkxRUXlRSUQKQVFBQk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQlRSdDJkN0JKUmZ5M1JjRDA3UzRIRGtIcHp5MEVIS0tZZgpFR2V6QkhtK0tZeWsyaDZYeEIveVIrcm5JemJyekR6ZHM3S0FENjRuZ2dxUnBNaXA2aTBPaUlYM1VzUS9UYkxGCnExMmhDUU9yYlZPOUdGVUx2dGthRHlSMXpRNWdWZW5uK1ZsOGNzYi9TT280MDNWeWZKR0RFR0dkR0loU3JqRjcKU2Z6Rk1kZXN2cklrSjUzenBzRDlJQXZKOWtEbXN3bDV6WDNjY09LdFBnY09Cb0Z5b0k4aFFzZ1FicTlSQ1JTbgphK0ZyZTYvQklLVXVyQzZtVmVpSkJGZnBmcEd4UG1rMm9na1BwNVAwaEpsZ3YrV0dKTFV6VnU1WEJ6VEhUTENwCkNCenlLb1RZeVA2NnBwaWxVUXJGM3Ezem91d05OWm43cTRTZStkTUZxYm1mN3RZQ3ZPR0gKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
     rules:
       - operations: ["CREATE", "UPDATE"]
         apiGroups: ["*"]
         apiVersions: ["*"]
-        resources: ["deployments", "daemonsets", "cronjobs", "jobs", "statefulsets", "pods"]
+        resources:
+          [
+            "deployments",
+            "daemonsets",
+            "cronjobs",
+            "jobs",
+            "statefulsets",
+            "pods",
+          ]
 
   - name: service-monitor-safer.slok.dev
     clientConfig:
       service:
-        name: k8s-webhook-example
-        namespace: k8s-webhook-example
+        name: k8s-webhook
+        namespace: k8s-webhook
         path: /wh/mutating/safeservicemonitor
       caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM4ekNDQWRzQ0ZDL1lrSE50ZjQzajF1aGttbnpXc3pvQTZhbVFNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1EWXgKTkRBeUJnTlZCQU1NSzJzNGN5MTNaV0pvYjI5ckxXVjRZVzF3YkdVdWF6aHpMWGRsWW1odmIyc3RaWGhoYlhCcwpaUzV6ZG1Nd0hoY05NakF3TlRFNU1UQXdNakV6V2hjTk5EQXdOVEUwTVRBd01qRXpXakEyTVRRd01nWURWUVFECkRDdHJPSE10ZDJWaWFHOXZheTFsZUdGdGNHeGxMbXM0Y3kxM1pXSm9iMjlyTFdWNFlXMXdiR1V1YzNaak1JSUIKSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXlFczZzNUZzWExzRWR5bndZMThKNHpMQgpuNmFIYUdHdXVZU2NpeXNodXR3amJUTTdUMTNMeWEwdi93SmxlWGtObGQ4MkI2QWRhMjF0L1RsemxXdmFBenk4CnZBNFF3ZXdQdndiaVZ2MFRTOUdTczJZSmFjNFdPNzlCVE02ekJ6cTVPU3FwZ1JMSnVGdVp3ZWJkd2xzS0tDcjkKRzlka00rdjdKd0VaTCtKV1hPSVR5SWN4djlsV01ZV2dHUm1MK1dSb21SdGZWVnZDZmdJUEJsbWR4R3R2YVFIVgpDWkdGTDQrTzhLcUFUQmRaSUE1Q3p1TGZ2cDhYT29HVjlzTDRvR2xCKzJxTDVYVUQ1OEZQeTNYR3FlOW5NM0YyClF2Y2dtcTdGNGg0UmtqV0ZHR1YrdDVQRUpnVmJCYkJuVlR0b1FEd1c3RDBSY3BVZnB3TlY4aVBFQkxRUXlRSUQKQVFBQk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQlRSdDJkN0JKUmZ5M1JjRDA3UzRIRGtIcHp5MEVIS0tZZgpFR2V6QkhtK0tZeWsyaDZYeEIveVIrcm5JemJyekR6ZHM3S0FENjRuZ2dxUnBNaXA2aTBPaUlYM1VzUS9UYkxGCnExMmhDUU9yYlZPOUdGVUx2dGthRHlSMXpRNWdWZW5uK1ZsOGNzYi9TT280MDNWeWZKR0RFR0dkR0loU3JqRjcKU2Z6Rk1kZXN2cklrSjUzenBzRDlJQXZKOWtEbXN3bDV6WDNjY09LdFBnY09Cb0Z5b0k4aFFzZ1FicTlSQ1JTbgphK0ZyZTYvQklLVXVyQzZtVmVpSkJGZnBmcEd4UG1rMm9na1BwNVAwaEpsZ3YrV0dKTFV6VnU1WEJ6VEhUTENwCkNCenlLb1RZeVA2NnBwaWxVUXJGM3Ezem91d05OWm43cTRTZStkTUZxYm1mN3RZQ3ZPR0gKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
     rules:
@@ -37,16 +45,16 @@ webhooks:
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: k8s-webhook-example-webhook
+  name: k8s-webhook-webhook
   labels:
-    app: k8s-webhook-example-webhook
+    app: k8s-webhook-webhook
     kind: validator
 webhooks:
   - name: ingress-validation-webhook.slok.dev
     clientConfig:
       service:
-        name: k8s-webhook-example
-        namespace: k8s-webhook-example
+        name: k8s-webhook
+        namespace: k8s-webhook
         path: /wh/validating/ingress
       caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM4ekNDQWRzQ0ZDL1lrSE50ZjQzajF1aGttbnpXc3pvQTZhbVFNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1EWXgKTkRBeUJnTlZCQU1NSzJzNGN5MTNaV0pvYjI5ckxXVjRZVzF3YkdVdWF6aHpMWGRsWW1odmIyc3RaWGhoYlhCcwpaUzV6ZG1Nd0hoY05NakF3TlRFNU1UQXdNakV6V2hjTk5EQXdOVEUwTVRBd01qRXpXakEyTVRRd01nWURWUVFECkRDdHJPSE10ZDJWaWFHOXZheTFsZUdGdGNHeGxMbXM0Y3kxM1pXSm9iMjlyTFdWNFlXMXdiR1V1YzNaak1JSUIKSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXlFczZzNUZzWExzRWR5bndZMThKNHpMQgpuNmFIYUdHdXVZU2NpeXNodXR3amJUTTdUMTNMeWEwdi93SmxlWGtObGQ4MkI2QWRhMjF0L1RsemxXdmFBenk4CnZBNFF3ZXdQdndiaVZ2MFRTOUdTczJZSmFjNFdPNzlCVE02ekJ6cTVPU3FwZ1JMSnVGdVp3ZWJkd2xzS0tDcjkKRzlka00rdjdKd0VaTCtKV1hPSVR5SWN4djlsV01ZV2dHUm1MK1dSb21SdGZWVnZDZmdJUEJsbWR4R3R2YVFIVgpDWkdGTDQrTzhLcUFUQmRaSUE1Q3p1TGZ2cDhYT29HVjlzTDRvR2xCKzJxTDVYVUQ1OEZQeTNYR3FlOW5NM0YyClF2Y2dtcTdGNGg0UmtqV0ZHR1YrdDVQRUpnVmJCYkJuVlR0b1FEd1c3RDBSY3BVZnB3TlY4aVBFQkxRUXlRSUQKQVFBQk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQlRSdDJkN0JKUmZ5M1JjRDA3UzRIRGtIcHp5MEVIS0tZZgpFR2V6QkhtK0tZeWsyaDZYeEIveVIrcm5JemJyekR6ZHM3S0FENjRuZ2dxUnBNaXA2aTBPaUlYM1VzUS9UYkxGCnExMmhDUU9yYlZPOUdGVUx2dGthRHlSMXpRNWdWZW5uK1ZsOGNzYi9TT280MDNWeWZKR0RFR0dkR0loU3JqRjcKU2Z6Rk1kZXN2cklrSjUzenBzRDlJQXZKOWtEbXN3bDV6WDNjY09LdFBnY09Cb0Z5b0k4aFFzZ1FicTlSQ1JTbgphK0ZyZTYvQklLVXVyQzZtVmVpSkJGZnBmcEd4UG1rMm9na1BwNVAwaEpsZ3YrV0dKTFV6VnU1WEJ6VEhUTENwCkNCenlLb1RZeVA2NnBwaWxVUXJGM3Ezem91d05OWm43cTRTZStkTUZxYm1mN3RZQ3ZPR0gKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
     rules:

@@ -28,7 +28,7 @@ func NewCmdConfig() (*CmdConfig, error) {
 	c := &CmdConfig{
 		LabelMarks: map[string]string{},
 	}
-	app := kingpin.New("k8s-webhook-example", "A Kubernetes production-ready admission webhook example.")
+	app := kingpin.New("k8s-webhook", "A Kubernetes production-ready admission webhook.")
 	app.Version(Version)
 
 	app.Flag("debug", "Enable debug mode.").BoolVar(&c.Debug)

@@ -12,8 +12,8 @@ import (
 	validatingwh "github.com/slok/kubewebhook/pkg/webhook/validating"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/slok/k8s-webhook-example/internal/log"
-	"github.com/slok/k8s-webhook-example/internal/validation/ingress"
+	"github.com/pelotech/k8s-templated-configuration/internal/log"
+	"github.com/pelotech/k8s-templated-configuration/internal/validation/ingress"
 )
 
 // allmark sets up the webhook handler for marking all kubernetes resources using Kubewebhook library.

@@ -9,7 +9,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/slok/k8s-webhook-example/internal/mutation/mark"
+	"github.com/pelotech/k8s-templated-configuration/internal/mutation/mark"
 )
 
 func TestLabelMarkerMark(t *testing.T) {

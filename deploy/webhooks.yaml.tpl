@@ -1,16 +1,16 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: k8s-webhook-example-webhook
+  name: k8s-webhook-webhook
   labels:
-    app: k8s-webhook-example-webhook
+    app: k8s-webhook-webhook
     kind: mutator
 webhooks:
   - name: all-mark-webhook.slok.dev
     clientConfig:
       service:
-        name: k8s-webhook-example
-        namespace: k8s-webhook-example
+        name: k8s-webhook
+        namespace: k8s-webhook
         path: /wh/mutating/allmark
       caBundle: CA_BUNDLE
     rules:
@@ -22,8 +22,8 @@ webhooks:
   - name: service-monitor-safer.slok.dev
     clientConfig:
       service:
-        name: k8s-webhook-example
-        namespace: k8s-webhook-example
+        name: k8s-webhook
+        namespace: k8s-webhook
         path: /wh/mutating/safeservicemonitor
       caBundle: CA_BUNDLE
     rules:
@@ -36,16 +36,16 @@ webhooks:
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: k8s-webhook-example-webhook
+  name: k8s-webhook-webhook
   labels:
-    app: k8s-webhook-example-webhook
+    app: k8s-webhook-webhook
     kind: validator
 webhooks:
   - name: ingress-validation-webhook.slok.dev
     clientConfig:
       service:
-        name: k8s-webhook-example
-        namespace: k8s-webhook-example
+        name: k8s-webhook
+        namespace: k8s-webhook
         path: /wh/validating/ingress
       caBundle: CA_BUNDLE
     rules:
