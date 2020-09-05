@@ -1,6 +1,6 @@
 module github.com/pelotech/k8s-templated-configuration
 
-go 1.14
+go 1.15
 
 require (
 	// github.com/coreos/prometheus-operator v0.39.0

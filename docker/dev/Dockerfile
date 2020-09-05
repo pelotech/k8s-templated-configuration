@@ -1,4 +1,4 @@
-FROM golang:1.14
+FROM golang:1.15
 
 ARG GOLANGCI_LINT_VERSION="1.25.0"
 ARG ostype=Linux
