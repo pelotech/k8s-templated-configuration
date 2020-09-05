@@ -14,7 +14,7 @@ COPY . .
 RUN ./scripts/build/build.sh
 
 # Final image.
-FROM alpine:latest
+FROM busybox:latest
 RUN apk --no-cache add \
     ca-certificates
 COPY --from=build-stage /src/bin/k8s-webhook /usr/local/bin/k8s-webhook

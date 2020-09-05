@@ -1,7 +1,17 @@
 {
   "cSpell.words": [
+    "Infof",
     "Kubewebhook",
+    "Warningf",
+    "corev",
+    "healthz",
+    "metav",
+    "monitoringv",
+    "mutatingwh",
     "mutators",
-    "slok"
+    "oklog",
+    "slok",
+    "stretchr",
+    "whhttp"
   ]
 }

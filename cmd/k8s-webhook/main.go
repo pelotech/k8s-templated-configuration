@@ -18,9 +18,7 @@ import (
 	"github.com/pelotech/k8s-templated-configuration/internal/http/webhook"
 	"github.com/pelotech/k8s-templated-configuration/internal/log"
 	internalmetricsprometheus "github.com/pelotech/k8s-templated-configuration/internal/metrics/prometheus"
-	"github.com/pelotech/k8s-templated-configuration/internal/mutation/mark"
-	internalmutationprometheus "github.com/pelotech/k8s-templated-configuration/internal/mutation/prometheus"
-	"github.com/pelotech/k8s-templated-configuration/internal/validation/ingress"
+	"github.com/pelotech/k8s-templated-configuration/internal/mutation/template"
 )
 
 var (
@@ -48,44 +46,15 @@ func runApp() error {
 	// Dependencies.
 	metricsRec := internalmetricsprometheus.NewRecorder(prometheus.DefaultRegisterer)
 
-	var marker mark.Marker
-	if len(cfg.LabelMarks) > 0 {
-		marker = mark.NewLabelMarker(cfg.LabelMarks)
-		logger.Infof("label marker webhook enabled")
-	} else {
-		marker = mark.DummyMarker
-		logger.Warningf("label marker webhook disabled")
-	}
-
-	var ingressHostValidator ingress.Validator
-	if len(cfg.IngressHostRegexes) > 0 {
-		ingressHostValidator, err = ingress.NewHostRegexValidator(cfg.IngressHostRegexes)
-		if err != nil {
-			return fmt.Errorf("could not create ingress regex host validator: %w", err)
-		}
-		logger.Infof("ingress host regex validation webhook enabled")
-	} else {
-		ingressHostValidator = ingress.DummyValidator
-		logger.Warningf("ingress host regex validation webhook disabled")
-	}
-
-	var ingressSingleHostValidator ingress.Validator
-	if cfg.EnableIngressSingleHost {
-		ingressSingleHostValidator = ingress.SingleHostValidator
-		logger.Infof("ingress single host validation webhook enabled")
-	} else {
-		ingressSingleHostValidator = ingress.DummyValidator
-		logger.Warningf("ingress single host validation webhook disabled")
-	}
-
-	var serviceMonitorSafer internalmutationprometheus.ServiceMonitorSafer
-	if cfg.MinSMScrapeInterval != 0 {
-		serviceMonitorSafer = internalmutationprometheus.NewServiceMonitorSafer(cfg.MinSMScrapeInterval)
-		logger.Infof("service monitor safer webhook enabled")
-	} else {
-		serviceMonitorSafer = internalmutationprometheus.DummyServiceMonitorSafer
-		logger.Warningf("service monitor safer webhook disabled")
-	}
+	var templater template.Templater
+	templater = template.NewTemplater(cfg.LabelMarks)
+	// if len(cfg.LabelMarks) > 0 {
+	// 	template = mark.NewLabelMarker(cfg.LabelMarks)
+	// 	logger.Infof("label marker webhook enabled")
+	// } else {
+	// 	template = mark.DummyMarker
+	// 	logger.Warningf("label marker webhook disabled")
+	// }
 
 	// Prepare run entrypoints.
 	var g run.Group
@@ -158,12 +127,9 @@ func runApp() error {
 
 		// Webhook handler.
 		wh, err := webhook.New(webhook.Config{
-			Marker:                     marker,
-			IngressRegexHostValidator:  ingressHostValidator,
-			IngressSingleHostValidator: ingressSingleHostValidator,
-			ServiceMonitorSafer:        serviceMonitorSafer,
-			MetricsRecorder:            metricsRec,
-			Logger:                     logger,
+			Templater:       templater,
+			MetricsRecorder: metricsRec,
+			Logger:          logger,
 		})
 		if err != nil {
 			return fmt.Errorf("could not create webhooks handler: %w", err)

@@ -6,23 +6,11 @@ import (
 
 // routes wires the routes to handlers on a specific router.
 func (h handler) routes(router *http.ServeMux) error {
-	allmark, err := h.allMark()
+	templatepod, err := h.templatePod()
 	if err != nil {
 		return err
 	}
-	router.Handle("/wh/mutating/allmark", allmark)
-
-	ingressVal, err := h.ingressValidation()
-	if err != nil {
-		return err
-	}
-	router.Handle("/wh/validating/ingress", ingressVal)
-
-	safeServiceMonitor, err := h.safeServiceMonitor()
-	if err != nil {
-		return err
-	}
-	router.Handle("/wh/mutating/safeservicemonitor", safeServiceMonitor)
+	router.Handle("/wh/mutating/template", templatepod)
 
 	return nil
 }

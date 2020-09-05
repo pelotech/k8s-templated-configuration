@@ -60,7 +60,7 @@ func New(config Config) (http.Handler, error) {
 		return nil, fmt.Errorf("could not register routes on handler: %w", err)
 	}
 
-	// Register root handler middlware.
+	// Register root handler middleware.
 	h.handler = h.measuredHandler(h.handler) // Add metrics middleware.
 
 	return h, nil
