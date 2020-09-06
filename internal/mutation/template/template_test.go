@@ -14,12 +14,12 @@ import (
 
 func TestTemplaterTemplate(t *testing.T) {
 	tests := map[string]struct {
-		config map[string]string
-		obj    *corev1.Pod
-		expObj *corev1.Pod
+		container corev1.Container
+		obj       *corev1.Pod
+		expObj    *corev1.Pod
 	}{
 		"Given a pod, with no annotations nothing should happen.": {
-			config: map[string]string{},
+			container: corev1.Container{},
 			obj: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
@@ -33,7 +33,7 @@ func TestTemplaterTemplate(t *testing.T) {
 		},
 
 		"Given a pod, with secrets and volumes annotations initContainer should be created.": {
-			config: map[string]string{},
+			container: corev1.Container{},
 			obj: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
@@ -55,7 +55,7 @@ func TestTemplaterTemplate(t *testing.T) {
 					InitContainers: []corev1.Container{
 						{
 							Name:  "templated-config",
-							Image: "pelotech/envsub", //TODO: parameterize
+							Image: "pelotech/envtemplate",
 							VolumeMounts: []corev1.VolumeMount{
 								{
 									Name:      "volume1",
@@ -78,7 +78,9 @@ func TestTemplaterTemplate(t *testing.T) {
 			},
 		},
 		"Given a pod, with configMaps and volumes annotations initContainer should be created.": {
-			config: map[string]string{},
+			container: corev1.Container{
+				Image: "pelotech/image",
+			},
 			obj: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
@@ -100,7 +102,7 @@ func TestTemplaterTemplate(t *testing.T) {
 					InitContainers: []corev1.Container{
 						{
 							Name:  "templated-config",
-							Image: "pelotech/envsub", //TODO: parameterize
+							Image: "pelotech/image",
 							VolumeMounts: []corev1.VolumeMount{
 								{
 									Name:      "volume1",
@@ -129,7 +131,7 @@ func TestTemplaterTemplate(t *testing.T) {
 			assert := assert.New(t)
 			require := require.New(t)
 
-			m := template.NewTemplater(test.config)
+			m := template.NewTemplater(test.container)
 
 			err := m.Template(context.TODO(), test.obj)
 			require.NoError(err)

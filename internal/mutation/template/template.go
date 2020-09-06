@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/imdario/mergo"
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -13,19 +14,25 @@ const (
 	volumesAnnotation    = "template.pelo.tech/into-volumes"
 )
 
+var defaultContainer = corev1.Container{
+	Name:  "templated-config",
+	Image: "pelotech/envtemplate",
+}
+
 // Templater knows how to template Kubernetes pods.
 type Templater interface {
 	Template(ctx context.Context, pod *corev1.Pod) error
 }
 
 // NewTemplater returns a new templater that will template with labels.
-func NewTemplater(config map[string]string) Templater {
-	return templater{config: config}
+func NewTemplater(container corev1.Container) Templater {
+	mergo.Merge(&container, defaultContainer)
+	return templater{container: container}
 }
 
 // Templater knows how to template Kubernetes pods.
 type templater struct {
-	config map[string]string
+	container corev1.Container
 }
 
 // Template knows how to template Kubernetes pods.
@@ -93,13 +100,11 @@ func (t templater) Template(_ context.Context, pod *corev1.Pod) error {
 	}
 
 	initcontainer := corev1.Container{
-		Name:         "templated-config",
-		Image:        "pelotech/envsub", //TODO: parameterize
 		VolumeMounts: volumemounts,
 		EnvFrom:      envfrom,
 		Args:         volumes,
 	}
-
+	mergo.Merge(&initcontainer, t.container)
 	pod.Spec.InitContainers = append(pod.Spec.InitContainers, initcontainer)
 
 	return nil

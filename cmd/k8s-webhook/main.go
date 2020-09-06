@@ -19,6 +19,7 @@ import (
 	"github.com/pelotech/k8s-templated-configuration/internal/log"
 	internalmetricsprometheus "github.com/pelotech/k8s-templated-configuration/internal/metrics/prometheus"
 	"github.com/pelotech/k8s-templated-configuration/internal/mutation/template"
+	corev1 "k8s.io/api/core/v1"
 )
 
 var (
@@ -47,7 +48,7 @@ func runApp() error {
 	metricsRec := internalmetricsprometheus.NewRecorder(prometheus.DefaultRegisterer)
 
 	var templater template.Templater
-	templater = template.NewTemplater(cfg.LabelMarks)
+	templater = template.NewTemplater(corev1.Container{})
 	// if len(cfg.LabelMarks) > 0 {
 	// 	template = mark.NewLabelMarker(cfg.LabelMarks)
 	// 	logger.Infof("label marker webhook enabled")

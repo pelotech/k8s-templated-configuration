@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	// github.com/coreos/prometheus-operator v0.39.0
+	github.com/imdario/mergo v0.3.11
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.6.0
 	github.com/sirupsen/logrus v1.6.0
