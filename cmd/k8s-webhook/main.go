@@ -47,8 +47,10 @@ func runApp() error {
 	// Dependencies.
 	metricsRec := internalmetricsprometheus.NewRecorder(prometheus.DefaultRegisterer)
 
-	var templater template.Templater
-	templater = template.NewTemplater(corev1.Container{})
+	templater, err := template.NewTemplater(corev1.Container{})
+	if err != nil {
+		return err
+	}
 	// if len(cfg.LabelMarks) > 0 {
 	// 	template = mark.NewLabelMarker(cfg.LabelMarks)
 	// 	logger.Infof("label marker webhook enabled")

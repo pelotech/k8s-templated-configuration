@@ -131,10 +131,11 @@ func TestTemplaterTemplate(t *testing.T) {
 			assert := assert.New(t)
 			require := require.New(t)
 
-			m := template.NewTemplater(test.container)
-
-			err := m.Template(context.TODO(), test.obj)
+			m, err := template.NewTemplater(test.container)
 			require.NoError(err)
+
+			err1 := m.Template(context.TODO(), test.obj)
+			require.NoError(err1)
 
 			assert.Equal(test.expObj, test.obj)
 		})

@@ -26,12 +26,12 @@ type Templater interface {
 }
 
 // NewTemplater returns a new templater that will template with labels.
-func NewTemplater(container corev1.Container) Templater {
+func NewTemplater(container corev1.Container) (Templater, error) {
 
 	if err := mergo.Merge(&container, defaultContainer); err != nil {
-		fmt.Errorf("could not add merge config initContainer with default initContainer: %w", err)
+		return nil, fmt.Errorf("could not add merge config initContainer with default initContainer: %w", err)
 	}
-	return templater{container: container}
+	return templater{container: container}, nil
 }
 
 // Templater knows how to template Kubernetes pods.
@@ -109,7 +109,7 @@ func (t templater) Template(_ context.Context, pod *corev1.Pod) error {
 		Args:         volumes,
 	}
 	if err := mergo.Merge(&initcontainer, t.container); err != nil {
-		fmt.Errorf("could not add merge config initContainer with generated initContainer: %w", err)
+		return fmt.Errorf("could not add merge config initContainer with generated initContainer: %w", err)
 	}
 	pod.Spec.InitContainers = append(pod.Spec.InitContainers, initcontainer)
 
