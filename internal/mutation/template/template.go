@@ -37,43 +37,59 @@ func (t templater) Template(_ context.Context, pod *corev1.Pod) error {
 	secretsannotationvalue := annotations[secretsAnnotation]
 	configmapsannotationvalue := annotations[configMapsAnnotation]
 	volumesannotationvalue := annotations[volumesAnnotation]
-	if "" == (secretsannotationvalue+configmapsannotationvalue) ||
-		"" == volumesannotationvalue {
-		return nil
+
+	var (
+		secrets    []string
+		configmaps []string
+		volumes    []string
+	)
+	if secretsannotationvalue != "" {
+		secrets = strings.Split(secretsannotationvalue, ",")
 	}
-	secrets := strings.Split(secretsannotationvalue, ",")
-	configmaps := strings.Split(configmapsannotationvalue, ",")
-	volumes := strings.Split(volumesannotationvalue, ",")
+	if configmapsannotationvalue != "" {
+		configmaps = strings.Split(configmapsannotationvalue, ",")
+	}
+	if volumesannotationvalue != "" {
+		volumes = strings.Split(volumesannotationvalue, ",")
+	}
 
 	lenvolumemounts := len(volumes)
-	lenenvfrom := len(secrets) + len(configmaps)
-
+	lensecrets := len(secrets)
+	lenenvfrom := lensecrets + len(configmaps)
+	if lenenvfrom == 0 || lenvolumemounts == 0 {
+		return nil
+	}
 	volumemounts := make([]corev1.VolumeMount, lenvolumemounts)
-	for _, volume := range volumes {
-		volumemounts = append(volumemounts, corev1.VolumeMount{
+	for index, volume := range volumes {
+		volumemounts[index] = corev1.VolumeMount{
 			Name:      volume,
 			MountPath: "/" + volume,
-		})
+		}
 	}
 
 	envfrom := make([]corev1.EnvFromSource, lenenvfrom)
-	for _, secret := range secrets {
-		envfrom = append(envfrom, corev1.EnvFromSource{
-			SecretRef: &corev1.SecretEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: secret,
+	if secretsannotationvalue != "" {
+		for index, secret := range secrets {
+			envfrom[index] = corev1.EnvFromSource{
+				SecretRef: &corev1.SecretEnvSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: secret,
+					},
 				},
-			},
-		})
+			}
+		}
 	}
-	for _, configmap := range configmaps {
-		envfrom = append(envfrom, corev1.EnvFromSource{
-			ConfigMapRef: &corev1.ConfigMapEnvSource{
-				LocalObjectReference: corev1.LocalObjectReference{
-					Name: configmap,
+
+	if configmapsannotationvalue != "" {
+		for index, configmap := range configmaps {
+			envfrom[lensecrets+index] = corev1.EnvFromSource{
+				ConfigMapRef: &corev1.ConfigMapEnvSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: configmap,
+					},
 				},
-			},
-		})
+			}
+		}
 	}
 
 	initcontainer := corev1.Container{
