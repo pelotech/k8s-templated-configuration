@@ -15,7 +15,7 @@ RUN ./scripts/build/build.sh
 
 # Final image.
 FROM busybox:latest
-RUN apk --no-cache add \
-    ca-certificates
+# RUN apk --no-cache add \
+#     ca-certificates
 COPY --from=build-stage /src/bin/k8s-webhook /usr/local/bin/k8s-webhook
 ENTRYPOINT ["/usr/local/bin/k8s-webhook"]
