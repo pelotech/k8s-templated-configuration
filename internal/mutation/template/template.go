@@ -2,6 +2,7 @@ package template
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/imdario/mergo"
@@ -26,7 +27,10 @@ type Templater interface {
 
 // NewTemplater returns a new templater that will template with labels.
 func NewTemplater(container corev1.Container) Templater {
-	mergo.Merge(&container, defaultContainer)
+
+	if err := mergo.Merge(&container, defaultContainer); err != nil {
+		fmt.Errorf("could not add merge config initContainer with default initContainer: %w", err)
+	}
 	return templater{container: container}
 }
 
@@ -104,7 +108,9 @@ func (t templater) Template(_ context.Context, pod *corev1.Pod) error {
 		EnvFrom:      envfrom,
 		Args:         volumes,
 	}
-	mergo.Merge(&initcontainer, t.container)
+	if err := mergo.Merge(&initcontainer, t.container); err != nil {
+		fmt.Errorf("could not add merge config initContainer with generated initContainer: %w", err)
+	}
 	pod.Spec.InitContainers = append(pod.Spec.InitContainers, initcontainer)
 
 	return nil
