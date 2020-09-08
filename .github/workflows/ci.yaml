@@ -51,8 +51,8 @@ jobs:
           # DOCKER_TOKEN: ${{secrets.DOCKER_HUB_TOKEN}}
           ## Github.
           DOCKER_HOST: docker.pkg.github.com
-          DOCKER_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          DOCKER_USER: ${GITHUB_ACTOR}
+          DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_USER: $GITHUB_ACTOR
           ## Gitlab.
           # DOCKER_HOST: registry.gitlab.com
           # DOCKER_USER: kav
