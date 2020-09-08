@@ -57,6 +57,7 @@ jobs:
           # DOCKER_HOST: registry.gitlab.com
           # DOCKER_USER: kav
           # DOCKER_TOKEN: ${{secrets.GITLAB_TOKEN}}
-
+      - name: Show Env
+        run: printenv
       - name: Publish image
         run: make publish-image
