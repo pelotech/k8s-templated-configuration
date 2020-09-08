@@ -67,6 +67,6 @@ jobs:
           ## Github.
           DOCKER_HOST: docker.pkg.github.com
           DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_USER: $GITHUB_ACTOR
+          DOCKER_USER: ${{ github.actor }}
       - name: Publish image
         run: make publish-image
