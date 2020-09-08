@@ -49,3 +49,29 @@ jobs:
       - name: Publish image
         run: make publish-image
         
+  release-webhook-image:
+    if: startsWith(github.ref, 'refs/tags/')
+    env: 
+      TAG_IMAGE_LATEST: "true"
+    needs: [check, test]
+    name: Release Webhook Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set tag on VERSION env var
+        run: echo ::set-env name=VERSION::$(echo ${GITHUB_REF:10})
+      - uses: actions/checkout@v1
+      - name: Build image
+        run: make build-image
+      - name: Docker login
+        run: docker login ${DOCKER_HOST} -u ${DOCKER_USER} -p ${DOCKER_TOKEN}
+        env:
+          DOCKER_HOST: docker.pkg.github.com
+          DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKER_USER: ${GITHUB_ACTOR}
+      - name: Publish image
+        env:
+          IMAGE: ${PROD_IMAGE_NAME} 
+          DOCKER_FILE_PATH: ./docker/prod/Dockerfile 
+          VERSIO: ${VERSION} 
+        run: ./scripts/build/build-image.sh
+      
