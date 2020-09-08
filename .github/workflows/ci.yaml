@@ -70,7 +70,7 @@ jobs:
           DOCKER_USER: ${GITHUB_ACTOR}
       - name: Publish image
         env:
-          IMAGE: ${PROD_IMAGE_NAME} 
+          IMAGE: pelotech/templated-configuration-webhook 
           DOCKER_FILE_PATH: ./docker/prod/Dockerfile 
           VERSIO: ${VERSION} 
         run: ./scripts/build/build-image.sh
