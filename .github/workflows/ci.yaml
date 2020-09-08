@@ -29,9 +29,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     env:
       TAG_IMAGE_LATEST: "true"
-      #PROD_IMAGE_NAME: ${GITHUB_REPOSITORY}
-      #PROD_IMAGE_NAME: docker.pkg.github.com/${GITHUB_REPOSITORY}/app
-      PROD_IMAGE_NAME: registry.gitlab.com/${GITHUB_REPOSITORY}
+      PROD_IMAGE_NAME: docker.pkg.github.com/${GITHUB_REPOSITORY}/app
     needs: [check, test]
     name: Release image
     runs-on: ubuntu-latest
@@ -45,28 +43,9 @@ jobs:
       - name: Docker login
         run: docker login ${DOCKER_HOST} -u ${DOCKER_USER} -p ${DOCKER_TOKEN}
         env:
-          # DockerHub.
-          # DOCKER_HOST: ""
-          # DOCKER_USER: kavla
-          # DOCKER_TOKEN: ${{secrets.DOCKER_HUB_TOKEN}}
-          ## Github.
           DOCKER_HOST: docker.pkg.github.com
           DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_USER: $GITHUB_ACTOR
-          ## Gitlab.
-          # DOCKER_HOST: registry.gitlab.com
-          # DOCKER_USER: kav
-          # DOCKER_TOKEN: ${{secrets.GITLAB_TOKEN}}
-      - name: Show Env
-        run: printenv
-        env:
-          # DockerHub.
-          # DOCKER_HOST: ""
-          # DOCKER_USER: kavla
-          # DOCKER_TOKEN: ${{secrets.DOCKER_HUB_TOKEN}}
-          ## Github.
-          DOCKER_HOST: docker.pkg.github.com
-          DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_USER: ${{ github.actor }}
+          DOCKER_USER: ${GITHUB_ACTOR}
       - name: Publish image
         run: make publish-image
+        
