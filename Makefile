@@ -31,13 +31,21 @@ help: ## Show this help
 .PHONY: default
 default: help
 
-.PHONY: build-image
-build-image: ## Builds the production docker image.
-	@$(BUILD_PROD_IMAGE_CMD)
+.PHONY: build-webhook-image
+build-webhook-image: ## Builds the webhook docker image.
+	@$(BUILD_WEBHOOK_IMAGE_CMD)
+	
+.PHONY: build-envtemplate-image
+build-envtemplate-image: ## Builds the envtemplate docker image.
+	@$(BUILD_ENVTEMPLATE_IMAGE_CMD)
 
-.PHONY: publish-image
-publish-image: ##Publishes the production docker image.
-	@$(PUBLISH_PROD_IMAGE_CMD)
+.PHONY: publish-webhook-image
+publish-webhook-image: ##Publishes the webhook docker image.
+	@$(PUBLISH_WEBHOOK_IMAGE_CMD)
+
+.PHONY: publish-envtemplate-image
+publish-envtemplate-image: ##Publishes the envtemplate docker image.
+	@$(PUBLISH_ENVTEMPLATE_IMAGE_CMD)
 
 .PHONY: build-dev-image
 build-dev-image:  ## Builds the development docker image.
