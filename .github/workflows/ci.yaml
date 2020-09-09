@@ -68,10 +68,13 @@ jobs:
           DOCKER_HOST: docker.pkg.github.com
           DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCKER_USER: ${GITHUB_ACTOR}
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
       - name: Publish image
         env:
           IMAGE: pelotech/templated-configuration-webhook 
           DOCKER_FILE_PATH: ./docker/envtemplate/Dockerfile 
-          VERSION: ${{ GITHUB_REF##*/ }}
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
         run: ./scripts/build/build-image.sh
       
