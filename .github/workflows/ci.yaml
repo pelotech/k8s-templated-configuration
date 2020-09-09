@@ -76,6 +76,6 @@ jobs:
           IMAGE: pelotech/templated-configuration-webhook 
           DOCKER_FILE_PATH: Dockerfile 
           VERSION: ${{ steps.get_version.outputs.VERSION }}
-        run: ./scripts/build/build-image.sh
+        run: ../../scripts/build/build-image.sh
         working-directory: ./docker/envtemplate
       
