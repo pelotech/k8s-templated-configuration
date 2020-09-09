@@ -31,7 +31,7 @@ jobs:
       TAG_IMAGE_LATEST: "true"
       PROD_IMAGE_NAME: docker.pkg.github.com/${GITHUB_REPOSITORY}/webhook
     needs: [check, test]
-    name: Release image
+    name: Publish webhook
     runs-on: ubuntu-latest
     # Only run in master and when has a tag.
     steps:
@@ -54,7 +54,7 @@ jobs:
     env: 
       TAG_IMAGE_LATEST: "true"
     needs: [check, test]
-    name: Release Webhook Image
+    name: Publish envtemplate
     runs-on: ubuntu-latest
     steps:
       - name: Set tag on VERSION env var
