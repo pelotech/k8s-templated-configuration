@@ -53,6 +53,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     env: 
       TAG_IMAGE_LATEST: "true"
+      IMAGE: docker.pkg.github.com/${{ github.repository }}/envtemplate
     needs: [check, test]
     name: Publish envtemplate
     runs-on: ubuntu-latest
@@ -71,11 +72,14 @@ jobs:
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-      - name: Publish image
+      - name: Build image
         env:
           DOCKER_FILE_PATH: Dockerfile 
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-          IMAGE: docker.pkg.github.com/${{ github.repository }}/envtemplate
         run: ../../scripts/build/build-image.sh
         working-directory: ./docker/envtemplate
+      - name: Publish Image
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+        run: publish-image.sh
+        working-directory: ./scripts/build
       
