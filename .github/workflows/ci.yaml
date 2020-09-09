@@ -39,7 +39,7 @@ jobs:
         run: echo ::set-env name=VERSION::$(echo ${GITHUB_REF:10})
       - uses: actions/checkout@v1
       - name: Build image
-        run: make build-image
+        run: make build-webhook-image
       - name: Docker login
         run: docker login ${DOCKER_HOST} -u ${DOCKER_USER} -p ${DOCKER_TOKEN}
         env:
@@ -47,39 +47,29 @@ jobs:
           DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCKER_USER: ${GITHUB_ACTOR}
       - name: Publish image
-        run: make publish-image
+        run: make publish-webhook-image
         
   publish-envtemplate:
     if: startsWith(github.ref, 'refs/tags/')
-    env: 
+    env:
       TAG_IMAGE_LATEST: "true"
-      IMAGE: docker.pkg.github.com/${{ github.repository }}/envtemplate
+      PROD_IMAGE_NAME: docker.pkg.github.com/${GITHUB_REPOSITORY}/envtemplate
     needs: [check, test]
     name: Publish envtemplate
     runs-on: ubuntu-latest
+    # Only run in master and when has a tag.
     steps:
       - name: Set tag on VERSION env var
         run: echo ::set-env name=VERSION::$(echo ${GITHUB_REF:10})
       - uses: actions/checkout@v1
       - name: Build image
-        run: make build-image
+        run: make build-envtemplate-image
       - name: Docker login
         run: docker login ${DOCKER_HOST} -u ${DOCKER_USER} -p ${DOCKER_TOKEN}
         env:
           DOCKER_HOST: docker.pkg.github.com
           DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCKER_USER: ${GITHUB_ACTOR}
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-      - name: Build image
-        env:
-          DOCKER_FILE_PATH: Dockerfile 
-        run: ../../scripts/build/build-image.sh
-        working-directory: ./docker/envtemplate
-      - name: Publish Image
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-        run: publish-image.sh
-        working-directory: ./scripts/build
+      - name: Publish image
+        run: make publish-envtemplate-image
       
