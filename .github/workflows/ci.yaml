@@ -74,7 +74,8 @@ jobs:
       - name: Publish image
         env:
           IMAGE: pelotech/templated-configuration-webhook 
-          DOCKER_FILE_PATH: ./docker/envtemplate/Dockerfile 
+          DOCKER_FILE_PATH: Dockerfile 
           VERSION: ${{ steps.get_version.outputs.VERSION }}
         run: ./scripts/build/build-image.sh
+        working-directory: ./docker/envtemplate
       
