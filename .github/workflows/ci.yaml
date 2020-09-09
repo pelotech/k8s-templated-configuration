@@ -72,6 +72,6 @@ jobs:
         env:
           IMAGE: pelotech/templated-configuration-webhook 
           DOCKER_FILE_PATH: ./docker/envtemplate/Dockerfile 
-          VERSION: ${{ github.ref }}
+          VERSION: ${{ GITHUB_REF##*/ }}
         run: ./scripts/build/build-image.sh
       
