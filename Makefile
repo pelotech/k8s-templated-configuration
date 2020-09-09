@@ -11,13 +11,16 @@ INTEGRATION_TEST_CMD := ./scripts/check/integration-test.sh
 CHECK_CMD := ./scripts/check/check.sh
 
 DEV_IMAGE_NAME := pelotech/templated-configuration-webhook-dev
-PROD_IMAGE_NAME ?=  pelotech/templated-configuration-webhook
+WEBHOOK_IMAGE_NAME ?=  pelotech/templated-configuration-webhook
+ENVTEMPLATE_IMAGE_NAME ?= pelotech/envtemplate_webhook
 
 DOCKER_RUN_CMD := docker run --env ostype=$(OSTYPE) -v ${PWD}:/src --rm -it ${DEV_IMAGE_NAME}
 BUILD_BINARY_CMD := VERSION=${VERSION} ./scripts/build/build.sh
 BUILD_DEV_IMAGE_CMD := IMAGE=${DEV_IMAGE_NAME} DOCKER_FILE_PATH=./docker/dev/Dockerfile VERSION=latest ./scripts/build/build-image.sh
-BUILD_PROD_IMAGE_CMD := IMAGE=${PROD_IMAGE_NAME} DOCKER_FILE_PATH=./docker/prod/Dockerfile VERSION=${VERSION} ./scripts/build/build-image.sh
-PUBLISH_PROD_IMAGE_CMD := IMAGE=${PROD_IMAGE_NAME} VERSION=${VERSION} ./scripts/build/publish-image.sh
+BUILD_WEBHOOK_IMAGE_CMD := IMAGE=${PROD_IMAGE_NAME} DOCKER_FILE_PATH=./docker/prod/Dockerfile VERSION=${VERSION} ./scripts/build/build-image.sh
+BUILD_ENVTEMPLATE_IMAGE_CMD := IMAGE=${ENVTEMPLATE_IMAGE_NAM} DOCKER_FILE_PATH=./docker/envtemplate/Dockerfile VERSION=${VERSION} ./scripts/build/build-image.sh
+PUBLISH_WEBHOOK_IMAGE_CMD := IMAGE=${WEBHOOK_IMAGE_NAME} VERSION=${VERSION} ./scripts/build/publish-image.sh
+PUBLISH_ENVTEMPLATE_IMAGE_CMD := IMAGE=${ENVTEMPLATE_IMAGE_NAME} VERSION=${VERSION} ./scripts/build/publish-image.sh
 GEN_CERTS_CMD := ./scripts/gen-certs.sh
 
 
