@@ -75,7 +75,7 @@ jobs:
         env:
           DOCKER_FILE_PATH: Dockerfile 
           VERSION: ${{ steps.get_version.outputs.VERSION }}
-          IMAGE: docker.pkg.github.com/${{GITHUB_REPOSITORY}}/envtemplate
+          IMAGE: docker.pkg.github.com/${{ github.repository }}/envtemplate
         run: ../../scripts/build/build-image.sh
         working-directory: ./docker/envtemplate
       
