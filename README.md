@@ -2,7 +2,7 @@
 
 ## Overview
 
-Often when working with teams new to Kubernetes we find their applications are not factored in a Kubernetes friendly way. One of the most immediate ways this manifests itself is configuration and secret data being mixed together. While we can address this by storing all configuration containing private data in secrets we've found this causes a number of additional challenges. Especially for teams new to Kubernetes.
+Often when working with teams new to Kubernetes we find their applications are not factored in a Kubernetes friendly way. One of the most immediate ways this manifests itself is configuration and secret data being mixed together. While we can address this by storing all configuration containing private data in secrets we've found this causes a number of additional challenges when debugging or modifying configurations across environments.
 
 Ideally we'd be able to extract just the secret content from our configuration, and at pod startup inject it into our ConfigMaps using a standard template format.
 
